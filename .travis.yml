@@ -3,6 +3,9 @@ sudo: yes
 services:
   - docker
 
+script:
+  - true # please don't print out secrets
+
 deploy:
   - provider: script
     script: build.sh
