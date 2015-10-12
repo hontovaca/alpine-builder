@@ -3,11 +3,8 @@ sudo: yes
 services:
   - docker
 
-script:
-  - docker build -t vaca/builder .
-
 deploy:
   - provider: script
     script: build.sh
     on:
-      branch: master
+      branch: travis-build

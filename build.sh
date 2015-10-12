@@ -10,8 +10,12 @@ if [ -z "$hub_repo" ]; then
   hub_repo=$(cd ..; echo "${PWD##*/}")/${PWD##*/}
 fi
 
-git fetch --depth=1 origin versions:versions
-git clone -b versions . versions
+git fetch --depth=1 origin master:builder versions:versions
+for b in builder versions; do
+  git clone -b "$b" . "$b"
+done
+
+docker build -t vaca/builder builder
 
 for spec in versions/*; do
   (. "$spec"
