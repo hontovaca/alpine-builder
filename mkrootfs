@@ -1,0 +1,39 @@
+#!/bin/sh -eu
+exec 3>&1 >&2 #save stdout for later, diagnostics to stderr
+
+# set defaults
+dest=mnt
+mirror=http://alpine.gliderlabs.com/alpine
+rel=edge
+pkg=alpine-baselayout,alpine-keys,apk-tools,musl-utils
+
+while getopts hd:m:r:p:t:ES opt; do
+  case $opt in
+    d) dest=$OPTARG ;;
+    m) mirror=$OPTARG ;;
+    r) rel=$OPTARG ;;
+    p) pkg=$OPTARG ;;
+    t) tzdata=$OPTARG ;;
+    S) noout=1 ;;
+    *) exec echo "$0 [-d:] [-m:] [-r:] [-p:] [-t:] [-S]" ;;
+  esac
+done
+
+# ensure the destination exists
+mkdir -p "$dest/etc/apk"
+cd "$dest"
+
+# set up the repositories file
+{ echo "$mirror/$rel/main"
+  wget -s "$mirror/$rel/community" 2>&- && echo "$mirror/$rel/community"
+  [ "$rel" = edge ] || echo @edge "$mirror/edge/main"
+  echo @testing "$mirror/edge/testing"
+} > etc/apk/repositories
+
+# fetch the container contents
+apk -p . -U --keys-dir /etc/apk/keys add --initdb ${pkg//,/ }
+rm -f var/cache/apk/*
+[ ${tzdata+1} ] && cp "/usr/share/zoneinfo/$tzdata" etc/localtime
+
+# output if requested
+[ ${noout+1} ] || tar c * >&3
