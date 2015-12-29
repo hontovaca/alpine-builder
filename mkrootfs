@@ -32,8 +32,7 @@ cd "$dest"
 } > etc/apk/repositories
 
 # fetch the container contents
-(IFS=,; apk -p . -U --keys-dir /etc/apk/keys add --initdb $pkg)
-rm -f var/cache/apk/*
+(IFS=,; apk -p . --no-cache --keys-dir /etc/apk/keys add --initdb $pkg)
 [ ${tzdata+1} ] && cp "/usr/share/zoneinfo/$tzdata" etc/localtime
 
 # output if requested
