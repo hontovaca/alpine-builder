@@ -11,7 +11,7 @@ The `mkrootfs` script may also be used by itself to build a rootfs, which may be
 The builder script takes the following options:
 
 * `-d dest`: Sets the build destination. Defaults to `mnt`. This is unlikely to be useful when using the builder image. A volume mounted to the destination directory will collect the resulting rootfs, but this use is unsupported.
-* `-m mirror`: Sets the base mirror URL. Defaults to the Glider Labs CDN proxy, `http://alpine.gliderlabs.com/alpine`.
+* `-m mirror`: Sets the base mirror URL. Defaults to the Glider Labs CDN proxy at `http://dl-cdn.alpinelinux.org/alpine`.
 * `-r release`: Sets the release tag. Defaults to `edge`. A useful alternative might be `latest-stable` or `v3.3`.
 * `-p packages`: Comma-separated packages list to be passed into `apk add`. Default is `alpine-baselayout,alpine-keys,apk-tools,musl-utils`, which is an unholy abomination providing a functional container with no init. A sane alternative might be `alpine-base`.
 * `-t timezone`: Sets the timezone. If not provided, no timezone will be set, which is probably fine.
