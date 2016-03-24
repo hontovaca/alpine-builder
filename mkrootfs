@@ -26,10 +26,10 @@ cd "$dest"
 
 # set up the repositories file
 { echo "$mirror/$rel/main"
-  wget -s "$mirror/$rel/community" 2>&- && echo "$mirror/$rel/community"
+  wget -qO- "$mirror/$rel/community" >&4 2>&4 && echo "$mirror/$rel/community"
   [ "$rel" = edge ] || echo @edge "$mirror/edge/main"
   echo @testing "$mirror/edge/testing"
-} > etc/apk/repositories
+} > etc/apk/repositories 4>/dev/null
 
 # fetch the container contents
 (IFS=,; apk -p . --no-cache --keys-dir /etc/apk/keys add --initdb $pkg)
